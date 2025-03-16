@@ -3,7 +3,6 @@
 <head>
     <title>Gardening App</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCigzEQoomU5rOHeqvVEFoBTxBx-Kc6KRc&libraries=places"></script>
 </head>
 <body>
     <div class="container">
@@ -68,12 +67,5 @@
         </div>
     </div>
     <script src="script.js"></script>
-    <script>
-        function initAutocomplete() {
-            const addressInput = document.getElementById('clientAddress');
-            const autocomplete = new google.maps.places.Autocomplete(addressInput);
-        }
-        google.maps.event.addDomListener(window, 'load', initAutocomplete);
-    </script>
 </body>
 </html>
