@@ -14,23 +14,10 @@ function addClient() {
     const name = document.getElementById('clientName').value;
     const address = document.getElementById('clientAddress').value;
     const contact = document.getElementById('clientContact').value;
-
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'address': address }, function(results, status) {
-        if (status === 'OK' && results[0]) {
-            const validatedAddress = results[0].formatted_address;
-            clients.push({ id: Date.now(), name, address: validatedAddress, contact });
-            saveClients();
-            updateClientOptions();
-            displayClientList();
-        } else {
-            alert('Address validation failed. Using entered address.');
-            clients.push({ id: Date.now(), name, address, contact });
-            saveClients();
-            updateClientOptions();
-            displayClientList();
-        }
-    });
+    clients.push({ id: Date.now(), name, address, contact });
+    saveClients();
+    updateClientOptions();
+    displayClientList();
 }
 
 function addAppointment() {
@@ -65,8 +52,8 @@ function displayAppointments() {
         if (client && client.name.toLowerCase().includes(searchName)) {
             const appointmentDiv = document.createElement('div');
             appointmentDiv.innerHTML = `
-                <strong>${client.name}</strong>: ${appointment.date} ${appointment.time} - ${appointment.duration} min - ${appointment.description}
-                <button onclick="deleteAppointment(${appointment.id})">Delete</button>
+                <strong>${client.name}</strong>: ${appointment.date} ${appointment.time} - ${appointment.duration} min - <span class="math-inline">\{appointment\.description\}
+<button onclick\="deleteAppointment\(</span>{appointment.id})">Delete</button>
             `;
             list.appendChild(appointmentDiv);
         }
@@ -137,39 +124,5 @@ function displayClientList() {
     clients.forEach(client => {
         const clientDiv = document.createElement('div');
         clientDiv.innerHTML = `
-            ${client.name} - ${client.address} - ${client.contact}
-            <button onclick="updateClient(${client.id})">Update</button>
-            <button onclick="deleteClient(${client.id})">Delete</button>
-        `;
-        clientList.appendChild(clientDiv);
-    });
-}
-
-function updateClient(id) {
-    const client = clients.find(c => c.id === id);
-    if (client) {
-        const name = prompt("Enter new name:", client.name);
-        const address = prompt("Enter new address:", client.address);
-        const contact = prompt("Enter new contact:", client.contact);
-        if (name && address && contact) {
-            client.name = name;
-            client.address = address;
-            client.contact = contact;
-            saveClients();
-            updateClientOptions();
-            displayClientList();
-        }
-    }
-}
-
-function deleteClient(id) {
-    clients = clients.filter(c => c.id !== id);
-    saveClients();
-    updateClientOptions();
-    displayClientList();
-}
-
-updateClientOptions();
-displayAppointments();
-displayCalendar();
-displayClientList();
+            ${client.name} - ${client.address} - <span class="math-inline">\{client\.contact\}
+<button onclick\="updateClient\(</span>{client.id})">Update</
