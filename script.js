@@ -14,10 +14,23 @@ function addClient() {
     const name = document.getElementById('clientName').value;
     const address = document.getElementById('clientAddress').value;
     const contact = document.getElementById('clientContact').value;
-    clients.push({ id: Date.now(), name, address, contact });
-    saveClients();
-    updateClientOptions();
-    displayClientList();
+
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ 'address': address }, function(results, status) {
+        if (status === 'OK' && results[0]) {
+            const validatedAddress = results[0].formatted_address;
+            clients.push({ id: Date.now(), name, address: validatedAddress, contact });
+            saveClients();
+            updateClientOptions();
+            displayClientList();
+        } else {
+            alert('Address validation failed. Using entered address.');
+            clients.push({ id: Date.now(), name, address, contact });
+            saveClients();
+            updateClientOptions();
+            displayClientList();
+        }
+    });
 }
 
 function addAppointment() {
