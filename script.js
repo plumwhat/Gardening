@@ -1,5 +1,6 @@
 let clients = JSON.parse(localStorage.getItem('clients')) || [];
 let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+let currentDate = new Date();
 
 function saveClients() {
     localStorage.setItem('clients', JSON.stringify(clients));
@@ -45,13 +46,14 @@ function updateClientOptions() {
 function displayAppointments() {
     const list = document.getElementById('appointmentList');
     list.innerHTML = '';
+    const searchName = document.getElementById('searchName').value.toLowerCase();
     appointments.forEach(appointment => {
         const client = clients.find(c => c.id === appointment.clientID);
-        if (client) {
+        if (client && client.name.toLowerCase().includes(searchName)) {
             const appointmentDiv = document.createElement('div');
             appointmentDiv.innerHTML = `
-                <strong>${client.name}</strong>: ${appointment.date} ${appointment.time} - ${appointment.duration} min - ${appointment.description}
-                <button onclick="deleteAppointment(${appointment.id})">Delete</button>
+                <strong>${client.name}</strong>: ${appointment.date} ${appointment.time} - ${appointment.duration} min - <span class="math-inline">\{appointment\.description\}
+<button onclick\="deleteAppointment\(</span>{appointment.id})">Delete</button>
             `;
             list.appendChild(appointmentDiv);
         }
@@ -68,67 +70,17 @@ function deleteAppointment(id) {
 function displayCalendar() {
     const calendarGrid = document.getElementById('calendarGrid');
     calendarGrid.innerHTML = '';
-    const today = new Date();
-    const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    for (let i = 1; i <= daysInMonth; i++) {
-        const dayDiv = document.createElement('div');
-        dayDiv.classList.add('calendarDay');
-        dayDiv.textContent = i;
-        const appointmentsForDay = appointments.filter(appointment => {
-            const appointmentDate = new Date(appointment.date);
-            return appointmentDate.getDate() === i && appointmentDate.getMonth() === today.getMonth() && appointmentDate.getFullYear() === today.getFullYear();
-        });
-        if (appointmentsForDay.length > 0) {
-            appointmentsForDay.forEach(appointment => {
-                const client = clients.find(c => c.id === appointment.clientID);
-                if(client){
-                    dayDiv.innerHTML += `<br>${client.name} ${appointment.time} ${appointment.duration}min`;
-                }
-            })
-        }
-        calendarGrid.appendChild(dayDiv);
-    }
-}
+    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+    const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    document.getElementById('calendarMonth').textContent = monthNames[currentDate.getMonth()] + ' ' + currentDate.getFullYear();
 
-function displayClientList() {
-    const clientList = document.getElementById('clientList');
-    clientList.innerHTML = '';
-    clients.forEach(client => {
-        const clientDiv = document.createElement('div');
-        clientDiv.innerHTML = `
-            ${client.name} - ${client.address} - ${client.contact}
-            <button onclick="updateClient(${client.id})">Update</button>
-            <button onclick="deleteClient(${client.id})">Delete</button>
-        `;
-        clientList.appendChild(clientDiv);
-    });
-}
-
-function updateClient(id) {
-    const client = clients.find(c => c.id === id);
-    if (client) {
-        const name = prompt("Enter new name:", client.name);
-        const address = prompt("Enter new address:", client.address);
-        const contact = prompt("Enter new contact:", client.contact);
-        if (name && address && contact) {
-            client.name = name;
-            client.address = address;
-            client.contact = contact;
-            saveClients();
-            updateClientOptions();
-            displayClientList();
-        }
-    }
-}
-
-function deleteClient(id) {
-    clients = clients.filter(c => c.id !== id);
-    saveClients();
-    updateClientOptions();
-    displayClientList();
-}
-
-updateClientOptions();
-displayAppointments();
-displayCalendar();
-displayClientList();
+    let dayCounter = 1;
+    for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 7; j++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.classList.add('calendarDay');
+            if (i === 0 && j < firstDay) {
+                dayDiv.textContent = '';
+            } else if (dayCounter <= daysInMonth) {
+                dayDiv.textContent = dayCounter;
