@@ -52,8 +52,8 @@ function displayAppointments() {
         if (client && client.name.toLowerCase().includes(searchName)) {
             const appointmentDiv = document.createElement('div');
             appointmentDiv.innerHTML = `
-                <strong>${client.name}</strong>: ${appointment.date} ${appointment.time} - ${appointment.duration} min - <span class="math-inline">\{appointment\.description\}
-<button onclick\="deleteAppointment\(</span>{appointment.id})">Delete</button>
+                <strong>${client.name}</strong>: ${appointment.date} ${appointment.time} - ${appointment.duration} min - ${appointment.description}
+                <button onclick="deleteAppointment(${appointment.id})">Delete</button>
             `;
             list.appendChild(appointmentDiv);
         }
@@ -124,5 +124,39 @@ function displayClientList() {
     clients.forEach(client => {
         const clientDiv = document.createElement('div');
         clientDiv.innerHTML = `
-            ${client.name} - ${client.address} - <span class="math-inline">\{client\.contact\}
-<button onclick\="updateClient\(</span>{client.id})">Update</
+            ${client.name} - ${client.address} - ${client.contact}
+            <button onclick="updateClient(${client.id})">Update</button>
+            <button onclick="deleteClient(${client.id})">Delete</button>
+        `;
+        clientList.appendChild(clientDiv);
+    });
+}
+
+function updateClient(id) {
+    const client = clients.find(c => c.id === id);
+    if (client) {
+        const name = prompt("Enter new name:", client.name);
+        const address = prompt("Enter new address:", client.address);
+        const contact = prompt("Enter new contact:", client.contact);
+        if (name && address && contact) {
+            client.name = name;
+            client.address = address;
+            client.contact = contact;
+            saveClients();
+            updateClientOptions();
+            displayClientList();
+        }
+    }
+}
+
+function deleteClient(id) {
+    clients = clients.filter(c => c.id !== id);
+    saveClients();
+    updateClientOptions();
+    displayClientList();
+}
+
+updateClientOptions();
+displayAppointments();
+displayCalendar();
+displayClientList();
