@@ -1,71 +1,77 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Gardening App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Gardening App</h1>
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #2196F3;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --accent-color: #FFC107;
+}
 
-        <div id="addClient">
-            <h2>Add Client</h2>
-            <input type="text" id="clientName" placeholder="Name"><br>
-            <input type="text" id="clientAddress" placeholder="Address"><br>
-            <input type="text" id="clientContact" placeholder="Contact"><br>
-            <button onclick="addClient()">Add Client</button>
-        </div>
+body {
+    font-family: sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
 
-        <div id="addAppointment">
-            <h2>Add Appointment</h2>
-            <select id="appointmentClient"></select><br>
-            <input type="date" id="appointmentDate"><br>
-            <input type="time" id="appointmentTime"><br>
-            <select id="appointmentDuration">
-                <option value="30">30 minutes</option>
-                <option value="60">1 hour</option>
-                <option value="90">1.5 hours</option>
-                <option value="120">2 hours</option>
-                <option value="150">2.5 hours</option>
-                <option value="180">3 hours</option>
-                <option value="210">3.5 hours</option>
-                <option value="240">half day</option>
-                <option value="480">full day</option>
-            </select><br>
-            <select id="appointmentDescription">
-                <option value="Gardening">Gardening</option>
-                <option value="Mowing">Mowing</option>
-                <option value="Blowing">Blowing</option>
-                <option value="Pressure Cleaning">Pressure Cleaning</option>
-            </select><br>
-            <button onclick="addAppointment()">Add Appointment</button>
-        </div>
+.container {
+    width: 80%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        <div id="searchAppointment">
-            <h2>Search Appointments</h2>
-            <input type="text" id="searchName" placeholder="Search by name">
-        </div>
+h1, h2 {
+    color: var(--primary-color);
+}
 
-        <div id="appointments">
-            <h2>Appointments</h2>
-            <div id="appointmentList"></div>
-        </div>
+input, select, button {
+    margin: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
 
-        <div id="calendar">
-            <h2>Calendar</h2>
-            <div id="calendarHeader">
-                <button onclick="prevMonth()">Prev</button>
-                <span id="calendarMonth"></span>
-                <button onclick="nextMonth()">Next</button>
-            </div>
-            <div id="calendarGrid"></div>
-        </div>
+button {
+    background-color: var(--secondary-color);
+    color: white;
+    cursor: pointer;
+}
 
-        <div id="manageClients">
-            <h2>Manage Clients</h2>
-            <div id="clientList"></div>
-        </div>
-    </div>
-    <script src="script.js"></script>
-</body>
-</html>
+button:hover {
+    background-color: #1976D2;
+}
+
+#appointments, #calendar, #manageClients, #searchAppointment {
+    margin-top: 20px;
+}
+
+#calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.calendarDay {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.calendarDay.hasAppointments {
+    background-color: var(--accent-color);
+}
